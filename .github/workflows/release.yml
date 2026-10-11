@@ -30,8 +30,8 @@ jobs:
   release:
     name: Propose version and open draft release
     runs-on: ubuntu-latest
-    # Only run on the maintainer forks, not on downstream forks.
-    if: github.repository_owner == 'jleinenbach' || github.repository_owner == 'BSkando'
+    # Only run on this fork.
+    if: github.repository_owner == 'gszigethy'
     concurrency:
       group: release
       cancel-in-progress: false

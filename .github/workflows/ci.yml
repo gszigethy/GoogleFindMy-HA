@@ -4,12 +4,17 @@ on:
   pull_request:
   push:
     branches:
-      - main
+      - "**"
+  workflow_dispatch:
 
 # Least-privilege default for every job (CodeQL actions/missing-workflow-permissions).
 # Jobs that need more declare it themselves.
 permissions:
   contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   hassfest:
@@ -485,6 +490,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 0
           repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref }}
 
@@ -529,15 +535,41 @@ jobs:
           set -o pipefail
           poetry run pytest -q --cov --cov-report=xml --cov-report=term --cov-fail-under=80 2>&1 | tee pytest_output.log
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
-          flags: unittests
-          name: codecov-py${{ matrix.python-version }}
-          fail_ci_if_error: false
-          verbose: true
+          name: pytest-python-${{ matrix.python-version }}
+          path: |
+            coverage.xml
+            pytest_output.log
+          retention-days: 7
+          if-no-files-found: warn
+
+      # Match the fork CI pattern used in 444hu_comments: analyze PRs and the
+      # default branch, since the SonarCloud plan does not cover feature branches.
+      - name: Check SonarQube Cloud availability
+        id: sonar
+        env:
+          CAN_SCAN: ${{ (github.event_name == 'pull_request' || github.ref_name == github.event.repository.default_branch) && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          if [ "$CAN_SCAN" != "true" ]; then
+            echo "::notice::SonarCloud runs on same-repository PRs and the default branch."
+          elif [ -n "$SONAR_TOKEN" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Configure the SONAR_TOKEN Actions secret for this fork."
+            exit 1
+          fi
+
+      - name: SonarQube Cloud analysis and quality gate
+        if: steps.sonar.outputs.enabled == 'true'
+        uses: SonarSource/sonarqube-scan-action@d209202bc7d53ff1cc128f7f907dac145c9d6ae9 # v8.3.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: -Dsonar.qualitygate.wait=true
 
       - name: Write short summary to GitHub Step Summary
         if: always()

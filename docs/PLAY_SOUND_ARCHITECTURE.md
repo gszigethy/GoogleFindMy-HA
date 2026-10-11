@@ -620,7 +620,7 @@ This is the opposite of our use case.
 >
 > What survives unchanged is the operational point: the 8-24 hours gate the autonomous
 > chime, not the flag bit, so the `uwt_mode` binary sensor must not be used as a
-> separation timer ([BSkando#210](https://github.com/BSkando/GoogleFindMy-HA/issues/210)).
+> separation timer (BSkando#210).
 
 **We must use FMDN Beacon Actions (authenticated ring)** because:
 1. We have the EIK → can derive the ring key
@@ -656,12 +656,12 @@ three independent ring trigger sources:
 >    only the owner holds while the mode is active.
 > 2. A chime with no cloud request behind it is specification-conformant and does not
 >    imply a defect in this integration
->    ([BSkando#195](https://github.com/BSkando/GoogleFindMy-HA/issues/195),
->    [BSkando#108](https://github.com/BSkando/GoogleFindMy-HA/issues/108)).
+>    (BSkando#195,
+>    BSkando#108).
 > 3. This flag is **not** the likeliest explanation for those reports. Row 2 of the
 >    table above, the DULT non-owner sound, is unauthenticated by design and needs no
 >    flag at all; the reporter in
->    [BSkando#210](https://github.com/BSkando/GoogleFindMy-HA/issues/210) attributes
+>    BSkando#210 attributes
 >    the observed chirps to that path, having instrumented the event bus to rule this
 >    integration out as the source. The `0x07` flag is documented here because it is
 >    the only mechanism that also removes authentication from the **owner** path,
@@ -669,7 +669,7 @@ three independent ring trigger sources:
 >
 > The advertisement reports the mode (`uwt_mode` binary sensor), never the flag, and
 > the mode itself is observed to flap on timescales of under a minute
-> ([BSkando#210](https://github.com/BSkando/GoogleFindMy-HA/issues/210)). It is
+> (BSkando#210). It is
 > context for a report, not evidence of a cause.
 
 ---

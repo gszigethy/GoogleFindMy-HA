@@ -494,7 +494,7 @@ git push origin your-branch-name
 
 ### Share with Community
 
-- **GitHub Issue:** Document endpoint in [GoogleFindMy-HA Issues](https://github.com/jleinenbach/GoogleFindMy-HA/issues)
+- **GitHub Issue:** Document endpoint in [GoogleFindMy-HA Issues](https://github.com/gszigethy/GoogleFindMy-HA/issues)
 - **Discord:** Share findings in [Google FindMy Discord](https://discord.gg/U3MkcbGzhc)
 - **Home Assistant Community:** Post in [HA Community Forum](https://community.home-assistant.io/t/google-findmy-find-hub-integration/931136)
 
@@ -529,7 +529,7 @@ Your discovery helps the entire community! 🙏
 
 **Discord:** Join [Google FindMy Discord Server](https://discord.gg/U3MkcbGzhc) for real-time help
 
-**GitHub Issues:** [Report problems or ask questions](https://github.com/jleinenbach/GoogleFindMy-HA/issues)
+**GitHub Issues:** [Report problems or ask questions](https://github.com/gszigethy/GoogleFindMy-HA/issues)
 
 **Home Assistant Community:** [Integration thread](https://community.home-assistant.io/t/google-findmy-find-hub-integration/931136)
 

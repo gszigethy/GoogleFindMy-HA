@@ -42,8 +42,8 @@ jobs:
   stamp:
     name: Stamp published version into code
     runs-on: ubuntu-latest
-    # Only run on the maintainer forks, not on downstream forks.
-    if: github.repository_owner == 'jleinenbach' || github.repository_owner == 'BSkando'
+    # Only run on this fork.
+    if: github.repository_owner == 'gszigethy'
     concurrency:
       group: release-stamp
       cancel-in-progress: false
@@ -120,7 +120,7 @@ jobs:
         # branch rules. A rejected push must never cost the release its HACS ZIP.
         run: |
           set -euo pipefail
-          # hacs.json sets zip_release=true + filename=googlefindmy.zip, so HACS
+          # If hacs.json enables zip_release=true + filename=googlefindmy.zip, HACS
           # installs THIS asset and extracts it directly into
           # custom_components/googlefindmy/. manifest.json MUST therefore sit at
           # the ZIP root -- zip the domain *contents* (`.` from inside the domain

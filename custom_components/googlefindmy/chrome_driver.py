@@ -726,7 +726,7 @@ def get_options(*, headless: bool = False) -> ChromeOptions:
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     # The two flags below relax the browser's own origin isolation. They are
-    # under discussion (BSkando/GoogleFindMy-HA#214), so here is what is known:
+    # under discussion (historical issue #214), so here is what is known:
     #
     # * Scope. ``get_options`` is reached only through ``create_driver``, and
     #   ``create_driver`` only from the manual command-line entry points

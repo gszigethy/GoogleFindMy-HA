@@ -98,7 +98,7 @@ Unlike the proprietary obscurity of Apple's initial launch, the DULT specificati
 > What still does **not** follow is a separation timer. The 8-24 hours below are
 > `T_(SEPARATED_UT_TIMEOUT)` and gate the *motion detector*, not the flag bit, and the
 > advertisement does not say whether that timer has expired. Do not build separation
-> timers on this sensor ([BSkando#210](https://github.com/BSkando/GoogleFindMy-HA/issues/210)). See
+> timers on this sensor (BSkando#210). See
 > `custom_components/googlefindmy/binary_sensor.py::GoogleFindMyUWTModeSensor`.
 
 This later event is the critical operational phase for anti-stalking alerts. When a device has been in the Separated state for `T_(SEPARATED_UT_TIMEOUT)`, it enables its motion detector, and it is already advertising in a way that makes it more visible to detection networks.

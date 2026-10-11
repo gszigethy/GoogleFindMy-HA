@@ -1043,7 +1043,7 @@ class RegistryOperations(_MixinBase):
                 "model": SERVICE_DEVICE_MODEL,
                 "sw_version": INTEGRATION_VERSION,
                 "entry_type": dr.DeviceEntryType.SERVICE,
-                "configuration_url": "https://github.com/BSkando/GoogleFindMy-HA",
+                "configuration_url": "https://github.com/gszigethy/GoogleFindMy-HA",
             }
             if service_device_name:
                 create_kwargs["name"] = service_device_name
@@ -1142,7 +1142,7 @@ class RegistryOperations(_MixinBase):
                     "model": SERVICE_DEVICE_MODEL,
                     "sw_version": INTEGRATION_VERSION,
                     "entry_type": dr.DeviceEntryType.SERVICE,
-                    "configuration_url": "https://github.com/BSkando/GoogleFindMy-HA",
+                    "configuration_url": "https://github.com/gszigethy/GoogleFindMy-HA",
                 }
                 if needs_identifier_sync:
                     new_identifiers = (
@@ -1232,7 +1232,7 @@ class RegistryOperations(_MixinBase):
                         "model": SERVICE_DEVICE_MODEL,
                         "sw_version": INTEGRATION_VERSION,
                         "entry_type": dr.DeviceEntryType.SERVICE,
-                        "configuration_url": "https://github.com/BSkando/GoogleFindMy-HA",
+                        "configuration_url": "https://github.com/gszigethy/GoogleFindMy-HA",
                         "translation_key": SERVICE_DEVICE_TRANSLATION_KEY,
                         "translation_placeholders": {},
                     }

@@ -1,0 +1,61 @@
+name: Test release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Unique beta version, for example 1.7.15.20b1'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: test-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.repository_owner == 'gszigethy'
+    runs-on: ubuntu-latest
+    env:
+      TEST_VERSION: ${{ inputs.version }}
+      SOURCE_BRANCH: ${{ github.ref_name }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Validate and stamp beta version
+        run: |
+          python3 - <<'PY'
+          import os
+          import re
+          version = os.environ['TEST_VERSION']
+          if not re.fullmatch(r'\d+\.\d+\.\d+(?:\.\d+)?b\d+', version):
+              raise SystemExit('Use a beta version such as 1.7.15.20b1')
+          PY
+          if git ls-remote --exit-code --tags origin "refs/tags/$TEST_VERSION"; then
+            echo '::error::This version already exists; choose a new beta version.'
+            exit 1
+          fi
+          python3 script/stamp_version.py --version "$TEST_VERSION"
+      - name: Publish isolated test build
+        run: |
+          SOURCE_SHA=$(git rev-parse HEAD)
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add custom_components/googlefindmy/manifest.json custom_components/googlefindmy/const.py pyproject.toml
+          git diff --cached --quiet || git commit -m "chore: stamp test version $TEST_VERSION"
+          git tag "$TEST_VERSION"
+          git push origin "refs/tags/$TEST_VERSION"
+          cat > /tmp/test-release-notes.md <<EOF_NOTES
+          Test build from branch: $SOURCE_BRANCH
+          Source commit: $SOURCE_SHA
+
+          In HACS, enable **Show beta versions**, choose **Redownload**, and select **$TEST_VERSION**. Restart Home Assistant after downloading.
+
+          The source branch is unchanged. This release contains the selected branch with all three version fields stamped to $TEST_VERSION.
+          EOF_NOTES
+          gh release create "$TEST_VERSION" --verify-tag --prerelease --title "Test $TEST_VERSION" --notes-file /tmp/test-release-notes.md

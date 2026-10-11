@@ -193,9 +193,9 @@ class TestReadingRegistry:
     def test_registry_keyed_by_curve_name(self) -> None:
         assert set(READINGS_BY_CURVE) == {SECP160R1.name, SECP256R1.name}
 
-    def test_feedback_url_is_issue_223(self) -> None:
+    def test_feedback_url_targets_fork(self) -> None:
         assert FOREIGN_READING_FEEDBACK_URL == (
-            "https://github.com/BSkando/GoogleFindMy-HA/issues/223"
+            "https://github.com/gszigethy/GoogleFindMy-HA/issues"
         )
 
     @pytest.mark.parametrize("half", [0, 33])

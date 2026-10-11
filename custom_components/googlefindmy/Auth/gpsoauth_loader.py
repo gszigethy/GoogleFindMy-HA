@@ -101,7 +101,7 @@ def _patch_perform_auth(mod: Any) -> None:
     References:
         https://github.com/simon-weber/gpsoauth/issues/81
         AuroraStore commit 50e3034b (GitLab whyorean/AuroraStore)
-        https://github.com/BSkando/GoogleFindMy-HA/issues/114
+        https://github.com/gszigethy/GoogleFindMy-HA/issues
     """
 
     if getattr(mod, "_gfm_patched", False):

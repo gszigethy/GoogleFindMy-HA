@@ -1,4 +1,4 @@
-# Google FindMy Device (Find Hub) - Home Assistant Integration <img src="https://github.com/BSkando/GoogleFindMy-HA/blob/main/icon.png" width="30">
+# Google FindMy Device (Find Hub) - Home Assistant Integration <img src="https://github.com/gszigethy/GoogleFindMy-HA/blob/main/icon.png" width="30">
 
 >[!CAUTION]
 > ## **V1.7 Semi-Breaking Change**
@@ -19,7 +19,7 @@ A comprehensive Home Assistant custom integration for Google's FindMy Device net
 [Google FindMy Discord Server](https://discord.gg/U3MkcbGzhc)
 
 ---
-<img src="https://github.com/BSkando/GoogleFindMy-HA/blob/main/icon.png" width="30"> [![GitHub Repo stars](https://img.shields.io/github/stars/BSkando/GoogleFindMy-HA?style=for-the-badge&logo=github)](https://github.com/BSkando/GoogleFindMy-HA) [![Home Assistant Community Forum](https://img.shields.io/badge/Home%20Assistant-Community%20Forum-blue?style=for-the-badge&logo=home-assistant)](https://community.home-assistant.io/t/google-findmy-find-hub-integration/931136) [![Continuous integration status](https://github.com/BSkando/GoogleFindMy-HA/actions/workflows/ci.yml/badge.svg)](https://github.com/BSkando/GoogleFindMy-HA/actions/workflows/ci.yml) [![Buy me a coffee](https://img.shields.io/badge/Coffee-Addiction!-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://www.buymeacoffee.com/bskando) <img src="https://github.com/BSkando/GoogleFindMy-HA/blob/main/icon.png" width="30">
+<img src="https://github.com/gszigethy/GoogleFindMy-HA/blob/main/icon.png" width="30"> [![GitHub Repo stars](https://img.shields.io/github/stars/gszigethy/GoogleFindMy-HA?style=for-the-badge&logo=github)](https://github.com/gszigethy/GoogleFindMy-HA) [![Home Assistant Community Forum](https://img.shields.io/badge/Home%20Assistant-Community%20Forum-blue?style=for-the-badge&logo=home-assistant)](https://community.home-assistant.io/t/google-findmy-find-hub-integration/931136) [![Continuous integration status](https://github.com/gszigethy/GoogleFindMy-HA/actions/workflows/ci.yml/badge.svg)](https://github.com/gszigethy/GoogleFindMy-HA/actions/workflows/ci.yml) [![Buy me a coffee](https://img.shields.io/badge/Coffee-Addiction!-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://www.buymeacoffee.com/bskando) <img src="https://github.com/gszigethy/GoogleFindMy-HA/blob/main/icon.png" width="30">
 
 >[!TIP]
 >**Home Assistant Core 2025.10 or newer is recommended.** The functional minimum is **2025.9.1** (enforced in `hacs.json` and `pyproject.toml`), the empirically determined floor at which all bundled integration dependencies resolve (verified with `script/check_ha_compatibility.py --find-minimum`). The config subentry flow maturity and the `async_added_to_hass` behavior the tracker/service subentries depend on landed earlier, in 2025.8, and the Core-managed config subentry model itself has been available since the 2025.3 cycle. Running 2025.10 or newer is recommended for the bug fixes and stability improvements made since 2025.9.1, not because of a hard API requirement.
@@ -135,9 +135,40 @@ The manifest classifies Google Find My Device as a **hub** integration. Home Ass
 >
 ## Installation
 
+### Testing fixes and PRs in this fork
+
+1. Put the fixes or selected PR commits on a branch in this fork and push it.
+2. Open **Actions → Test release → Run workflow**. Select that branch and enter
+   a unique beta version such as `1.7.15.20b1` (increase the number for each build).
+3. In HACS, open this repository, enable **Show beta versions**, choose
+   **Redownload**, and select the beta version. Restart Home Assistant.
+4. To roll back, redownload `main` or a previous test version and restart.
+
+The workflow publishes a prerelease from the selected branch and records its
+source commit. It stamps the version in an isolated commit reachable through the
+release tag; it does not change your source branch. Keep fixes as separate commits
+so you can cherry-pick the tested commits when backporting. No test release is
+published automatically on pushes.
+
+CI runs on branch pushes, pull requests, and manual requests, including Hassfest,
+HACS validation, lint, type checks, security checks, and Python tests with coverage.
+SonarCloud uses the `SONAR_TOKEN` Actions secret and enforces its quality gate on
+same-repository PRs and `main`, following this owner's existing CI setup. Coverage
+and test logs are available as workflow artifacts. Feature branches still run the
+local checks; open a PR against this fork to get SonarCloud analysis before
+backporting.
+
 ### HACS (Recommended)
+
+This fork installs directly from its `main` branch; no release ZIP is required.
+In HACS, open **Custom repositories**, enter
+`https://github.com/gszigethy/GoogleFindMy-HA`, and select **Integration**.
+If HACS already manages the original repository, remove that repository from HACS
+before adding this fork. Both use the `googlefindmy` integration domain, so keep
+only one installed copy. Existing Home Assistant configuration entries can be kept.
+
 1. Click the button below to add this custom repository to HACS\
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?category=integration&repository=GoogleFindMy-HA&owner=BSkando)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?category=integration&repository=GoogleFindMy-HA&owner=gszigethy)
 2. Install "Google Find My Device" from HACS
 3. Restart Home Assistant
 4. Add the integration through the UI
@@ -160,7 +191,7 @@ Generate the `secrets.json` bundle with **this repository's own login tooling**.
 > [!IMPORTANT]
 > Whichever option you pick, run the login from the **same public IP address / network** that your Home Assistant instance uses, and sign in with the **same Google account** that owns the trackers. Google ties the end-to-end encryption keys in `secrets.json` to the account and may revoke them when requests arrive from a different IP or region. A mismatch produces a bundle that lists your devices and can ring them, but cannot decrypt any location reports — see [Devices appear but no location updates](#authentication-expires-repeatedly).
 
-**Option A — Docker login helper (recommended).** Run the bundled one-command wrapper on your Docker host and complete the Google login through a browser tab: [`custom_components/googlefindmy/docker-login/`](custom_components/googlefindmy/docker-login/README.md). It runs Chrome **inside the container** at a controlled version, so you are not at the mercy of whatever Chrome your desktop auto-updates to — the exact failure that currently breaks the external browser flow ([BSkando#207](https://github.com/BSkando/GoogleFindMy-HA/issues/207)). No local Python or Chrome is required, and it works on ARM Linux too.
+**Option A — Docker login helper (recommended).** Run the bundled one-command wrapper on your Docker host and complete the Google login through a browser tab: [`custom_components/googlefindmy/docker-login/`](custom_components/googlefindmy/docker-login/README.md). It runs Chrome **inside the container** at a controlled version, so you are not at the mercy of whatever Chrome your desktop auto-updates to — the exact failure that currently breaks the external browser flow (BSkando#207). No local Python or Chrome is required, and it works on ARM Linux too.
 
 **Option B — Bundled CLI (`main.py`).** Copy the *contents* of `custom_components/googlefindmy/` into a fresh, empty directory (so that `main.py`, `Auth/`, `NovaApi/`, etc. sit directly at its top level) and run `python main.py` from there. The flat layout is the supported way to run it: the script resolves `Auth/secrets.json` relative to its own directory, so a run in place at `custom_components/googlefindmy/main.py` writes into your Home Assistant configuration directory instead of a scratch folder. It does **not** behave differently otherwise: `main.py` runs the token bootstrap in either layout, so an in-place run without stored credentials opens the Chrome login just as a flat run does. (An earlier version of this paragraph promised the opposite; the directory-dependent branch it described no longer exists.) Note that "without credentials" means the file has no username or no token at all: a *stale* token counts as present, and the run then stops later with an instruction to repeat it as `python main.py --reauth`. The browser packages this needs are `selenium` and `undetected-chromedriver`; install them where you run the CLI (`pip install selenium undetected-chromedriver`) — the scripts name the command themselves if they are missing. Run it from an **interactive terminal**: the desktop login opens Chrome on your own screen and asks you to confirm first, so it refuses to start when nobody can answer (see [Standalone login refuses to start](#standalone-login-refuses-to-start-attended-terminal-required)). If Chrome startup aborts with `only supports Chrome version …`, pin the version as described under [Chrome/ChromeDriver version mismatch](#chromechromedriver-version-mismatch-standalone-auth-scripts).
 
@@ -175,7 +206,7 @@ If you prefer the external tool, navigate to [GoogleFindMyTools](https://github.
 > You **MUST** go through **2 login processes**. After the first login your available devices are listed; you must then **select a device to locate**, which triggers a **second** login and retrieves the `shared_key`. If you stop after the device list appears, the resulting `secrets.json` has no `shared_key` and Home Assistant rejects the import with a `keys_missing` error, because locations cannot be decrypted without it.
 
 > [!NOTE]
-> The external browser login can abort with a Chrome/ChromeDriver version mismatch ([BSkando#207](https://github.com/BSkando/GoogleFindMy-HA/issues/207)). If you follow all of Leon's steps and still cannot get through the `main.py` sequence, try [BSkando/GoogleFindMyTools](https://github.com/BSkando/GoogleFindMyTools), or use Option A above, which sidesteps the desktop-Chrome dependency entirely.
+> The external browser login can abort with a Chrome/ChromeDriver version mismatch (BSkando#207). If you follow all of Leon's steps and still cannot get through the `main.py` sequence, try [BSkando/GoogleFindMyTools](https://github.com/BSkando/GoogleFindMyTools), or use Option A above, which sidesteps the desktop-Chrome dependency entirely.
 
 </details>
 
@@ -649,7 +680,7 @@ see also "Foreign-report readings" in
    tracker's location now updates.
 5. **Never post keys, EIDs, coordinates or IDs.** The log lines and the block
    are built to contain none of these.
-6. **Where:** <https://github.com/BSkando/GoogleFindMy-HA/issues/223>
+6. **Where:** <https://github.com/gszigethy/GoogleFindMy-HA/issues>
 
 ## Privacy and Security
 

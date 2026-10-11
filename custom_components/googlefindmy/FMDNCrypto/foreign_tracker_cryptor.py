@@ -93,7 +93,7 @@ _NONCE_LEN: int = 16
 # Single definition of the place where users post which reading decrypted
 # their P-256 reports (read by the log line and the diagnostics block).
 FOREIGN_READING_FEEDBACK_URL: Final[str] = (
-    "https://github.com/BSkando/GoogleFindMy-HA/issues/223"
+    "https://github.com/gszigethy/GoogleFindMy-HA/issues"
 )
 
 # Sources of the readings below: a public URL or a commit of this repository.

@@ -7,7 +7,7 @@ imports only the public ``decrypt`` function (unchanged signature) and the
 independent test oracle, so it can also be collected against a tree without
 the fix, where it fails at the length check and not at an import.
 
-Issue: https://github.com/BSkando/GoogleFindMy-HA/issues/223
+Issue: https://github.com/gszigethy/GoogleFindMy-HA/issues
 """
 
 from __future__ import annotations

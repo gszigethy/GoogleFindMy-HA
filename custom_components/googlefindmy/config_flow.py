@@ -1475,7 +1475,7 @@ _FIELD_USE_FOUND_BUNDLE = "use_found_bundle"
 _FIELD_OVERWRITE_CREDENTIALS = "overwrite_credentials"
 
 _SUBENTRIES_DOCS_URL = (
-    "https://github.com/BSkando/GoogleFindMy-HA/blob/main/README.md"
+    "https://github.com/gszigethy/GoogleFindMy-HA/blob/main/README.md"
     "#subentries-and-feature-groups"
 )
 _SUBENTRY_PLACEHOLDERS: dict[str, str] = {

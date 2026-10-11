@@ -537,7 +537,7 @@ browser flow is the only way to obtain the correct shared key.
 
 - **Status:** open (since 2026-10-07)
 - **Code:** `P256_FOREIGN_READINGS` in `custom_components/googlefindmy/FMDNCrypto/foreign_tracker_cryptor.py`
-- **Feedback:** <https://github.com/BSkando/GoogleFindMy-HA/issues/223> (`FOREIGN_READING_FEEDBACK_URL`)
+- **Feedback:** <https://github.com/gszigethy/GoogleFindMy-HA/issues> (`FOREIGN_READING_FEEDBACK_URL`)
 
 A foreign (crowdsourced) report from a P-256 tracker carries no field that says
 how the owner-side scalar and the AES-EAX nonce were derived. The integration

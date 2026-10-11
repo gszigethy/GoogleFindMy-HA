@@ -2469,7 +2469,7 @@ def fixture_stub_coordinator_factory() -> Callable[..., type[Any]]:
                     "name": service_name,
                     "translation_key": _SERVICE_DEVICE_TRANSLATION_KEY,
                     "translation_placeholders": {},
-                    "configuration_url": "https://github.com/BSkando/GoogleFindMy-HA",
+                    "configuration_url": "https://github.com/gszigethy/GoogleFindMy-HA",
                 }
 
                 try:

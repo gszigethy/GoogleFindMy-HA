@@ -16,9 +16,9 @@ description = "Home Assistant integration for Google's Find My Device network."
 readme = "README.md"
 license = "MIT"
 authors = ["BSkando"]
-homepage = "https://github.com/BSkando/GoogleFindMy-HA"
-documentation = "https://github.com/BSkando/GoogleFindMy-HA"
-repository = "https://github.com/BSkando/GoogleFindMy-HA"
+homepage = "https://github.com/gszigethy/GoogleFindMy-HA"
+documentation = "https://github.com/gszigethy/GoogleFindMy-HA"
+repository = "https://github.com/gszigethy/GoogleFindMy-HA"
 
 packages = [
     { include = "custom_components" }
